@@ -21,7 +21,6 @@ class AudioController:
 
     def playSystemAudio(self, option):
         self.audioMixer.init()
-        print(ROOT_DIR)
         if option == 0:
             pass
         # Bluetooth Ready To Pair Announcement
