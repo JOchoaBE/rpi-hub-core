@@ -130,7 +130,7 @@ if __name__ == "__main__":
         time.sleep(0.5)
 
         # Set default startup volume
-        subprocess.call('pactl set-sink-volume 0 40%', shell=True)
+        subprocess.call('pactl set-sink-volume 0 35%', shell=True)
 
         # Run DBUS asynchronous event loop in new thread
         #dbusLoop = GLib.MainLoop()

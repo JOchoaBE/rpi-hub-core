@@ -53,6 +53,11 @@ def monitorBluetoothDeviceStatus(interface, dictionary, var3):
             if bluetoothDeviceConnected:
                 print("Bluetooth device %s disconnected." % (connectedBluetoothDeviceName))
                 bluetoothDeviceConnected = False
+
+                # Play Bluetooth device disconnected announcement
+                audioController.playSystemAudio(3)
+
+                # Change LED status to disconnected
                 pairedBlinkLED = False
                 noBlinkLED = True
             else:

@@ -14,6 +14,7 @@ ROOT_DIR = os.path.dirname(os.path.dirname(__file__))
 class AudioController:
     BT_AUDIO_PAIR = os.path.join(ROOT_DIR, "bluetooth/resources/bt_pairing.wav")
     BT_AUDIO_CONNECTED = os.path.join(ROOT_DIR, "bluetooth/resources/bt_connected.wav")
+    BT_AUDIO_DISCONNECTED = os.path.join(ROOT_DIR, "bluetooth/resources/bt_disconnected.wav")
     audioMixer = pygame.mixer
 
     def __init__(self):
@@ -33,8 +34,11 @@ class AudioController:
             announcer = self.audioMixer.Sound(self.BT_AUDIO_CONNECTED)
             thread = threading.Thread(target=announcer.play)
             thread.start()
+        # Bluetooth Device Disconnected Announcement
         elif option == 3:
-            pass
+            announcer = self.audioMixer.Sound(self.BT_AUDIO_DISCONNECTED)
+            thread = threading.Thread(target=announcer.play)
+            thread.start()
         elif option == 4:
             pass
         else:
