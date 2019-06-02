@@ -7,7 +7,8 @@ import subprocess
 import os
 # Import Audio Controller Module
 from audio import audiocontroller
-
+# Import MQTT Controller Module
+from network import mqttcontroller
 # Import DBUS Linux modules
 import dbus.mainloop.glib
 # Import Bluetooth Agent
@@ -19,6 +20,9 @@ from bluetooth import bluetoothagent
 # Instantiate Audio Controller Class
 audioController = audiocontroller.AudioController()
 
+# Instantiate MQTT Controller Class
+mqttController = mqttcontroller.MQTTController("RPi Hub", "192.168.0.21", 1883)
+
 # LED Variables
 pairBlinkLED = False
 pairedBlinkLED = False
@@ -28,6 +32,11 @@ noBlinkLED = False
 bluetoothInitiateDiscovery = False
 bluetoothDeviceConnected = False
 connectedBluetoothDeviceName = ""
+
+### MQTT ###
+
+
+
 
 ### DBUS ###
 
