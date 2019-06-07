@@ -17,11 +17,14 @@ from bluetooth import bluetoothagent
 
 ### GLOBAL VARIABLES ###
 
+# Quit Threads Safely Variable
+threadQuit = False
+
 # Instantiate Audio Controller Class
 audioController = audiocontroller.AudioController()
 
 # Instantiate MQTT Controller Class
-mqttController = mqttcontroller.MQTTController("RPi Hub", "192.168.0.21", 1883)
+mqttController = mqttcontroller.MQTTController()
 
 # LED Variables
 pairBlinkLED = False
@@ -34,7 +37,8 @@ bluetoothDeviceConnected = False
 connectedBluetoothDeviceName = ""
 
 ### MQTT ###
-
+mqttClientConnected = False
+mqttClientDisconnected = False
 
 
 ### DBUS ###

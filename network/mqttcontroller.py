@@ -4,20 +4,35 @@ import paho.mqtt.client as mqtt
 import bridge
 
 
-class MQTTController(mqtt.Client):
+class MQTTController():
 
-    def __init__(self, deviceName, brokerAddress, brokerPortNumber):
-        self._client_id = deviceName
-        #self.deviceName = deviceName
-        self.brokerAddress = brokerAddress
-        self.brokerPortNumber = brokerPortNumber
+    def __init__(self):
+        self.client = mqtt.Client("RPi Hub")
+        self.client.on_connect = self.on_connect
+        self.client.on_disconnect = self.on_disconnect
 
-    def on_connect(self):
-        print("connected")
+    def on_connect(self, client, userdata, flags, rc):
+        if int(rc) == 0:
+            print("Connected to MQTT broker.")
+            bridge.mqttClientConnected = True
+        else:
+            print("Failed to connect to MQTT broker.")
 
-    def on_message(self):
-        pass
+    def on_disconnect(self, client, userdata, rc):
+        if int(rc) == 0:
+            print("Disconnected from MQTT broker.")
+            bridge.mqttClientConnected = False
+            bridge.mqttClientDisconnected = True
+        else:
+            print("Lost connection to MQTT broker.")
 
-    def connect(self):
-        self.connect(self.brokerAddress, self.brokerPortNumber)
-        self.loop_forever()
+    def start(self):
+        try:
+            self.client.connect("192.168.0.21", 1883)
+            self.client.loop_start()
+        except:
+            return 1
+        return 0
+
+    def stop(self):
+        self.client.loop_stop()

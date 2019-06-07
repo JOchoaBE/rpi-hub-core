@@ -35,7 +35,7 @@ def buttonSetup():
 
 # LED Controller Function
 def ledController():
-    while True:
+    while not bridge.threadQuit:
         if bridge.pairBlinkLED:
             gpioController.write(13, 1)
             time.sleep(0.3)
@@ -56,7 +56,7 @@ def ledController():
 
 # Button Controller Function
 def buttonController():
-    while True:
+    while not bridge.threadQuit:
         # Bluetooth Start Pairing Button
         if gpioController.read(16):
             if bridge.bluetoothDeviceConnected:
@@ -87,13 +87,23 @@ def buttonController():
 
 
 # Application Interrupt Handler Function
-def appInterrupt(x, y):
-    print("RPi Hub Core interrupted. Quitting...")
+def appInterrupt(arg0, arg1):
+    print("Quitting RPi Hub Core...")
+    bridge.threadQuit = True
+    bridge.mqttController.stop()
+    time.sleep(1)
     dbusLoop.quit()
     gpioController.stop()
-    subprocess.call('killall pulseaudio', shell=True)
-    time.sleep(0.5)
+    time.sleep(1)
+    subprocess.run(['killall', 'pulseaudio'], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    subprocess.run(['killall', 'mosquitto'], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    time.sleep(1)
+
+
+def appQuit():
+    appInterrupt(None, None)
     sys.exit(0)
+
 
 # Defines this module as the MAIN module
 if __name__ == "__main__":
@@ -147,9 +157,16 @@ if __name__ == "__main__":
 
         # Start MQTT client
         print("Connecting to MQTT broker...")
-        threadMQTT = threading.Thread(target=bridge.mqttController.connect)
+        mqttStatus = bridge.mqttController.start()
+        if mqttStatus != 0:
+            print("Failed to connect to MQTT broker. MQTT capabilities disabled.")
+        time.sleep(0.5)
 
-        print("RPi Hub Core boot successful.")
+        # Boot finished
+        print()
+        print("RPi Hub Core boot complete.")
+        print()
+
 
     except KeyboardInterrupt:
         #print("Quitting DBUS protocol access...")
