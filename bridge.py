@@ -37,7 +37,6 @@ connectedBluetoothDeviceName = ""
 
 
 
-
 ### DBUS ###
 
 

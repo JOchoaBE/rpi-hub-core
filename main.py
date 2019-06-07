@@ -138,6 +138,17 @@ if __name__ == "__main__":
         threadDBUS = threading.Thread(target=dbusLoop.run)
         threadDBUS.start()
 
+        # Start MQTT broker
+        print("Starting MQTT broker...")
+        subprocess.run(['killall', 'mosquitto'], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        time.sleep(0.5)
+        subprocess.run(['/usr/local/sbin/mosquitto', '-d'])
+        time.sleep(0.5)
+
+        # Start MQTT client
+        print("Connecting to MQTT broker...")
+        threadMQTT = threading.Thread(target=bridge.mqttController.connect)
+
         print("RPi Hub Core boot successful.")
 
     except KeyboardInterrupt:
