@@ -40,6 +40,8 @@ connectedBluetoothDeviceName = ""
 mqttClientConnected = False
 mqttClientDisconnected = False
 
+mqttBluetoothPair = False
+
 
 ### DBUS ###
 

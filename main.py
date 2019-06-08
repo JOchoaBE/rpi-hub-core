@@ -58,7 +58,8 @@ def ledController():
 def buttonController():
     while not bridge.threadQuit:
         # Bluetooth Start Pairing Button
-        if gpioController.read(16):
+        if gpioController.read(16) or bridge.mqttBluetoothPair:
+            bridge.mqttBluetoothPair = False
             if bridge.bluetoothDeviceConnected:
                 pass
             else:
